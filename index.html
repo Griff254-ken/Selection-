@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Global Synergy Protocol | Joy</title>
+    <title>The Global Synergy Protocol</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&family=Playfair+Display:ital,wght@0,700;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --accent: #d4af37; /* Architectural Gold */
-            --bg-overlay: rgba(10, 15, 25, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f0f0f0;
-            --transition-speed: 0.5s;
+            --accent: #d4af37; 
+            --bg-dark: #0a0f19;
+            --glass: rgba(15, 23, 42, 0.85);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f8fafc;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: #0a0f19;
-            color: var(--text-main);
+            background-color: var(--bg-dark);
+            color: var(--text);
             font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -29,262 +29,222 @@
             overflow: hidden;
         }
 
-        /* --- Dynamic Dynamic Background --- */
-        #bg-container {
+        #dynamic-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             background-size: cover;
             background-position: center;
-            transition: background-image 2s ease-in-out;
-            filter: brightness(0.4) saturate(0.8);
+            filter: brightness(0.3) blur(2px);
+            transition: background-image 1.5s ease-in-out;
+            background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920');
         }
 
-        /* Initial Background: Burj Khalifa */
-        .bg-burj { background-image: url('https://images.unsplash.com/photo-1526495124232-a027afbb48b1?auto=format&fit=crop&q=80&w=1920'); }
-        /* Alternative: Eiffel Tower */
-        .bg-eiffel { background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=1920'); }
-
-        /* --- Main App Shell --- */
-        #app-shell {
-            width: 90%;
-            max-width: 700px;
-            background: var(--bg-overlay);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            padding: 4rem 3rem;
-            border-radius: 4px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+        main {
+            width: 95%;
+            max-width: 800px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 3rem;
             position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
-        /* --- Step Transitions --- */
-        .step { display: none; animation: fadeIn 0.8s ease forwards; }
+        .step { display: none; animation: fadeIn 0.6s ease-out forwards; }
         .step.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent); }
+        .subtitle { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; display: block; }
 
-        /* --- UI Components --- */
-        h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 1rem; color: var(--accent); }
-        .subtitle { font-size: 0.75rem; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; display: block; }
-        
-        .choice-list {
+        /* Grid for Choices */
+        .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-top: 2rem;
+            max-height: 40vh;
+            overflow-y: auto;
+            padding-right: 10px;
         }
 
-        .choice-btn {
+        /* Custom Scrollbar */
+        .grid::-webkit-scrollbar { width: 4px; }
+        .grid::-webkit-scrollbar-thumb { background: var(--accent); }
+
+        .choice-card {
             background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            color: #fff;
-            font-size: 0.9rem;
-            font-weight: 600;
+            border: 1px solid var(--border);
+            padding: 1.2rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             text-align: left;
-            position: relative;
         }
 
-        .choice-btn:hover {
-            background: var(--accent);
-            color: #000;
+        .choice-card:hover {
             border-color: var(--accent);
-            transform: translateY(-3px);
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
         }
 
-        .choice-btn span {
-            display: block;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.7rem;
-            opacity: 0.7;
-            margin-top: 5px;
-        }
+        .choice-card h3 { font-size: 1rem; margin-bottom: 4px; }
+        .choice-card p { font-size: 0.7rem; opacity: 0.6; font-family: 'Fira Code', monospace; }
 
-        /* --- Enterprise Toast Logic --- */
-        #toast-stack {
-            position: fixed;
-            top: 20px; right: 20px;
-            z-index: 1000;
-        }
-
+        /* Toast Notifications */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; }
         .toast {
-            background: #fff;
-            color: #000;
-            padding: 12px 24px;
-            margin-bottom: 10px;
-            border-left: 5px solid var(--accent);
-            font-weight: 700;
-            font-size: 0.8rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideIn 0.4s ease forwards;
+            background: #fff; color: #000; padding: 12px 20px; border-radius: 4px;
+            margin-bottom: 10px; font-weight: 700; font-size: 0.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            animation: slideIn 0.3s ease forwards;
         }
 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        .progress-bar {
-            position: absolute;
-            top: 0; left: 0; height: 3px;
-            background: var(--accent);
-            transition: width 0.5s ease;
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--accent);
+            border-radius: 50%;
+            width: 40px; height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="bg-container" class="bg-eiffel"></div>
-    <div id="toast-stack"></div>
+    <div id="dynamic-bg"></div>
+    <div id="toast-container"></div>
 
-    <main id="app-shell">
-        <div class="progress-bar" id="progress"></div>
-
-        <div id="step-content">
+    <main>
+        <div id="step-container">
             </div>
     </main>
 
     <script>
-        // --- Enterprise Data Structure ---
         const config = {
             steps: [
                 {
-                    id: 'welcome',
-                    subtitle: 'Initialization',
-                    title: 'The Elite Selection',
-                    description: 'Compare architectural tastes, technical mastery, and linguistic preferences to determine your synergy with the standard.',
-                    options: [
-                        { label: 'Begin Protocol', value: 'start', type: 'next', bg: 'bg-burj' }
-                    ]
+                    id: 'intro',
+                    subtitle: 'Authentication',
+                    title: 'Welcome, Joy',
+                    desc: 'This protocol will synchronize your preferences with the global standard. Please proceed with precision.',
+                    options: [{ label: 'Initialize', value: 'start', meta: 'SECURE LINK' }]
                 },
                 {
-                    id: 'architect',
-                    subtitle: 'Infrastructure',
-                    title: 'Favorite Landmark?',
-                    description: 'Choose the silhouette that defines your vision of greatness.',
+                    id: 'state',
+                    subtitle: 'Geography',
+                    title: 'Preferred US State?',
+                    desc: 'Select the territory that aligns with your lifestyle or vision.',
                     options: [
-                        { label: 'Eiffel Tower', value: 'eiffel', meta: 'Paris, France', bg: 'bg-eiffel' },
-                        { label: 'Burj Khalifa', value: 'burj', meta: 'Dubai, UAE', bg: 'bg-burj' }
-                    ]
-                },
-                {
-                    id: 'engineer',
-                    subtitle: 'Authority',
-                    title: 'Technical Legend?',
-                    description: 'Who represents the pinnacle of digital craftsmanship?',
-                    options: [
-                        { label: 'Kevin Mitnick', value: 'mitnick', meta: 'The Greatest Hacker' },
-                        { label: 'Linus Torvalds', value: 'torvalds', meta: 'The Software Architect' }
+                        { label: 'California', value: 'CA', meta: 'Tech & Sunshine' },
+                        { label: 'Florida', value: 'FL', meta: 'Miami & Coastal' },
+                        { label: 'New York', value: 'NY', meta: 'Empire State' },
+                        { label: 'Texas', value: 'TX', meta: 'Modern Frontier' },
+                        { label: 'Washington', value: 'WA', meta: 'Nature & Innovation' }
                     ]
                 },
                 {
                     id: 'language',
                     subtitle: 'Communication',
-                    title: 'Preferred Dialect?',
-                    description: 'Which language are your favorite?',
+                    title: 'Linguistic Preference?',
+                    desc: 'Which culture do you wish to master?',
                     options: [
-                        { label: 'French', value: 'french', meta: 'La langue de l\'amour' },
-                        { label: 'Chinese', value: 'chinese', meta: 'Mandarin Mastery' },
-                        { label: 'Espanyol', value: 'spanish', meta: 'Spanish Elegance' },
-                        { label: 'Italian', value: 'italian', meta: 'Lirica Italiana' }
+                        { label: 'French', value: 'fr', meta: 'Elegance' },
+                        { label: 'Chinese', value: 'zh', meta: 'Influence' },
+                        { label: 'Spanish', value: 'es', meta: 'Passion' },
+                        { label: 'Italian', value: 'it', meta: 'Heritage' }
+                    ]
+                },
+                {
+                    id: 'music',
+                    subtitle: 'Acoustics',
+                    title: 'Rhythmic Alignment?',
+                    desc: 'What is the soundtrack to your excellence?',
+                    options: [
+                        { label: 'Hillsong', value: 'hillsong', meta: 'Pop Gospel' },
+                        { label: 'Amapiano', value: 'amapiano', meta: 'South African Soul' },
+                        { label: 'Afrobeats', value: 'afrobeats', meta: 'Global Rhythm' },
+                        { label: 'Trap', value: 'trap', meta: 'Urban Energy' }
                     ]
                 },
                 {
                     id: 'final',
-                    subtitle: 'Synergy Complete',
-                    title: 'Analysis Finished',
-                    description: 'Selections logged. The protocol is satisfied. Your preferences align with high-tier excellence.',
-                    options: [
-                        { label: 'Restart Session', value: 'reset', type: 'reset' }
-                    ]
+                    subtitle: 'Processing',
+                    title: 'Protocol Satisfied',
+                    desc: 'All selections have been encrypted. Your profile is now being analyzed by the system.',
+                    options: []
                 }
             ]
         };
 
-        let currentStepIndex = 0;
-        let selections = {};
-
-        // --- Core Engine ---
+        let currentStep = 0;
 
         function init() {
             renderStep(0);
-            notify("Secure connection established", "SUCCESS");
         }
 
         function renderStep(index) {
             const step = config.steps[index];
             const container = document.getElementById('step-content');
-            
-            // Progress Bar
-            const progress = ((index + 1) / config.steps.length) * 100;
-            document.getElementById('progress').style.width = `${progress}%`;
+            const root = document.getElementById('step-container');
 
-            // Background Transition
-            if (step.options[0].bg) {
-                updateBackground(step.options[0].bg);
-            }
-
-            let optionsHTML = `<div class="choice-list ${step.options.length === 1 ? 'single-choice' : ''}">`;
+            let gridHTML = `<div class="grid">`;
             step.options.forEach(opt => {
-                optionsHTML += `
-                    <button class="choice-btn" onclick="handleChoice('${step.id}', '${opt.value}', '${opt.label}', '${opt.bg || ''}')">
-                        ${opt.label}
-                        ${opt.meta ? `<span>${opt.meta}</span>` : ''}
-                    </button>
+                gridHTML += `
+                    <div class="choice-card" onclick="handleSelect('${step.id}', '${opt.value}', '${opt.label}')">
+                        <h3>${opt.label}</h3>
+                        <p>${opt.meta}</p>
+                    </div>
                 `;
             });
-            optionsHTML += `</div>`;
+            gridHTML += `</div>`;
 
-            container.innerHTML = `
+            root.innerHTML = `
                 <div class="step active">
                     <span class="subtitle">${step.subtitle}</span>
                     <h1>${step.title}</h1>
-                    <p>${step.description}</p>
-                    ${optionsHTML}
+                    <p class="description">${step.desc}</p>
+                    ${gridHTML}
                 </div>
             `;
+
+            if(step.id === 'final') {
+                root.innerHTML += `<div class="loader"></div>`;
+                // Data is already in localStorage. Just a fake "sending" delay.
+                setTimeout(() => {
+                    notify("DATA ENCRYPTED & SAVED", "SYSTEM");
+                }, 1500);
+            }
         }
 
-        function handleChoice(stepId, value, label, newBg) {
-            if (value === 'reset') {
-                location.reload();
-                return;
-            }
+        function handleSelect(id, val, label) {
+            // Enterprise Data Persistence
+            let currentData = JSON.parse(localStorage.getItem('joy_selections') || '{}');
+            currentData[id] = label;
+            localStorage.setItem('joy_selections', JSON.stringify(currentData));
 
-            selections[stepId] = value;
-            notify(`Selection Confirmed: ${label}`);
+            notify(`Logged: ${label}`);
             
-            if (newBg) updateBackground(newBg);
-
-            currentStepIndex++;
-            if (currentStepIndex < config.steps.length) {
-                renderStep(currentStepIndex);
+            currentStep++;
+            if (currentStep < config.steps.length) {
+                renderStep(currentStep);
             }
         }
 
-        function updateBackground(bgClass) {
-            const bg = document.getElementById('bg-container');
-            bg.className = bgClass;
-        }
-
-        function notify(msg, prefix = "LOG") {
-            const stack = document.getElementById('toast-stack');
+        function notify(msg, type = "UPDATE") {
+            const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerText = `[${prefix}] ${msg}`;
-            stack.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
+            toast.innerText = `[${type}] ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
 
         window.onload = init;
     </script>
 </body>
-  </html>
+    </html>
