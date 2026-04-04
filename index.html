@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Global Synergy Protocol</title>
+    <title>The Global Synergy Protocol | Joy</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&family=Playfair+Display:ital,wght@0,700;1,400&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
 
@@ -11,8 +11,8 @@
         :root {
             --accent: #d4af37; 
             --bg-dark: #0a0f19;
-            --glass: rgba(15, 23, 42, 0.85);
-            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(15, 23, 42, 0.9);
+            --border: rgba(255, 255, 255, 0.1);
             --text: #f8fafc;
         }
 
@@ -35,216 +35,225 @@
             z-index: -1;
             background-size: cover;
             background-position: center;
-            filter: brightness(0.3) blur(2px);
-            transition: background-image 1.5s ease-in-out;
-            background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920');
+            filter: brightness(0.25);
+            transition: background-image 2s ease-in-out;
+            background-image: url('https://images.unsplash.com/photo-1526495124232-a027afbb48b1?auto=format&fit=crop&q=80&w=1920'); /* Burj Khalifa Default */
         }
 
         main {
-            width: 95%;
-            max-width: 800px;
+            width: 90%;
+            max-width: 850px;
             background: var(--glass);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 3rem;
+            border-radius: 4px;
+            padding: 4rem;
             position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.7);
         }
 
-        .step { display: none; animation: fadeIn 0.6s ease-out forwards; }
+        .step { display: none; animation: slideIn 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
         .step.active { display: block; }
 
-        h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem; color: var(--accent); }
-        .subtitle { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; display: block; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 1rem; color: var(--accent); letter-spacing: -1px; }
+        .subtitle { font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; display: block; opacity: 0.8; }
+        .description { line-height: 1.8; margin-bottom: 2.5rem; color: #cbd5e1; font-weight: 300; }
 
-        /* Grid for Choices */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-            max-height: 40vh;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            max-height: 45vh;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 15px;
         }
 
-        /* Custom Scrollbar */
-        .grid::-webkit-scrollbar { width: 4px; }
+        .grid::-webkit-scrollbar { width: 3px; }
         .grid::-webkit-scrollbar-thumb { background: var(--accent); }
 
         .choice-card {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
-            padding: 1.2rem;
+            padding: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .choice-card:hover {
             border-color: var(--accent);
-            background: rgba(212, 175, 55, 0.1);
-            transform: translateY(-2px);
+            background: rgba(212, 175, 55, 0.08);
+            transform: translateY(-5px);
         }
 
-        .choice-card h3 { font-size: 1rem; margin-bottom: 4px; }
-        .choice-card p { font-size: 0.7rem; opacity: 0.6; font-family: 'Fira Code', monospace; }
+        .choice-card h3 { font-size: 1.1rem; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .choice-card p { font-size: 0.75rem; opacity: 0.5; font-family: 'Fira Code', monospace; color: var(--accent); }
 
-        /* Toast Notifications */
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; }
+        #toast-stack { position: fixed; top: 30px; right: 30px; z-index: 9999; }
         .toast {
-            background: #fff; color: #000; padding: 12px 20px; border-radius: 4px;
-            margin-bottom: 10px; font-weight: 700; font-size: 0.8rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-            animation: slideIn 0.3s ease forwards;
+            background: #fff; color: #000; padding: 14px 28px; margin-bottom: 12px;
+            font-weight: 800; font-size: 0.75rem; text-transform: uppercase;
+            border-left: 6px solid var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: toastEnter 0.5s ease forwards;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes toastEnter { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        .loader {
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid var(--accent);
-            border-radius: 50%;
-            width: 40px; height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        .progress-indicator {
+            position: absolute; top: 0; left: 0; height: 2px;
+            background: var(--accent); transition: width 0.6s ease;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="dynamic-bg"></div>
-    <div id="toast-container"></div>
+    <div id="toast-stack"></div>
 
     <main>
-        <div id="step-container">
-            </div>
+        <div class="progress-indicator" id="progress-bar"></div>
+        <div id="render-mount"></div>
     </main>
 
     <script>
-        const config = {
+        const AppConfig = {
             steps: [
                 {
-                    id: 'intro',
-                    subtitle: 'Authentication',
-                    title: 'Welcome, Joy',
-                    desc: 'This protocol will synchronize your preferences with the global standard. Please proceed with precision.',
-                    options: [{ label: 'Initialize', value: 'start', meta: 'SECURE LINK' }]
+                    id: 'init',
+                    subtitle: 'Secure Access',
+                    title: 'The Synergy Protocol',
+                    desc: 'Welcome, Joy. This interface is designed to map cultural, technical, and lifestyle preferences into a singular compatibility matrix.',
+                    options: [{ label: 'Initialize Protocol', value: 'start', meta: 'AUTH_REQUIRED' }]
+                },
+                {
+                    id: 'landmark',
+                    subtitle: 'Architecture',
+                    title: 'Favorite Icon?',
+                    desc: 'Which feat of human engineering resonates with your spirit?',
+                    options: [
+                        { label: 'Eiffel Tower', value: 'Eiffel', meta: 'Parisian Heritage' },
+                        { label: 'Burj Khalifa', value: 'Burj', meta: 'Dubai Innovation' }
+                    ]
+                },
+                {
+                    id: 'role_model',
+                    subtitle: 'Archetypes',
+                    title: 'Ideal Role Model?',
+                    desc: 'Choose the figure whose legacy of impact you admire most.',
+                    options: [
+                        { label: 'Elon Musk', value: 'Elon', meta: 'Multi-Planetary Vision' },
+                        { label: 'Mark Zuckerberg', value: 'Mark', meta: 'Social Connectivity' },
+                        { label: 'Kevin Mitnick', value: 'Kevin', meta: 'The Legend of Hacking' },
+                        { label: 'Ada Lovelace', value: 'Ada', meta: 'The First Programmer' }
+                    ]
                 },
                 {
                     id: 'state',
                     subtitle: 'Geography',
                     title: 'Preferred US State?',
-                    desc: 'Select the territory that aligns with your lifestyle or vision.',
+                    desc: 'Identify the region that best hosts your ambition.',
                     options: [
-                        { label: 'California', value: 'CA', meta: 'Tech & Sunshine' },
-                        { label: 'Florida', value: 'FL', meta: 'Miami & Coastal' },
-                        { label: 'New York', value: 'NY', meta: 'Empire State' },
-                        { label: 'Texas', value: 'TX', meta: 'Modern Frontier' },
-                        { label: 'Washington', value: 'WA', meta: 'Nature & Innovation' }
+                        { label: 'California', value: 'CA', meta: 'Valley Innovation' },
+                        { label: 'Florida', value: 'FL', meta: 'Miami Excellence' },
+                        { label: 'New York', value: 'NY', meta: 'Empire Ambition' },
+                        { label: 'Texas', value: 'TX', meta: 'Modern Scale' }
                     ]
                 },
                 {
                     id: 'language',
-                    subtitle: 'Communication',
-                    title: 'Linguistic Preference?',
-                    desc: 'Which culture do you wish to master?',
+                    subtitle: 'Linguistics',
+                    title: 'Foreign Dialect?',
+                    desc: 'Which language would you choose to master fluently?',
                     options: [
-                        { label: 'French', value: 'fr', meta: 'Elegance' },
-                        { label: 'Chinese', value: 'zh', meta: 'Influence' },
-                        { label: 'Spanish', value: 'es', meta: 'Passion' },
-                        { label: 'Italian', value: 'it', meta: 'Heritage' }
+                        { label: 'French', value: 'FR', meta: 'Romantic Precision' },
+                        { label: 'Chinese', value: 'ZH', meta: 'Global Mandate' },
+                        { label: 'Spanish', value: 'ES', meta: 'Vibrant Heritage' },
+                        { label: 'Italian', value: 'IT', meta: 'Classical Lyricism' }
                     ]
                 },
                 {
                     id: 'music',
                     subtitle: 'Acoustics',
-                    title: 'Rhythmic Alignment?',
-                    desc: 'What is the soundtrack to your excellence?',
+                    title: 'Musical Direction?',
+                    desc: 'Select the frequency that governs your atmosphere.',
                     options: [
-                        { label: 'Hillsong', value: 'hillsong', meta: 'Pop Gospel' },
-                        { label: 'Amapiano', value: 'amapiano', meta: 'South African Soul' },
-                        { label: 'Afrobeats', value: 'afrobeats', meta: 'Global Rhythm' },
-                        { label: 'Trap', value: 'trap', meta: 'Urban Energy' }
+                        { label: 'Hillsong', value: 'Hillsong', meta: 'Pop Gospel' },
+                        { label: 'Amapiano', value: 'Amapiano', meta: 'Soulful Pulse' },
+                        { label: 'Afrobeats', value: 'Afrobeats', meta: 'Vibrant Fusion' },
+                        { label: 'Trap', value: 'Trap', meta: 'Sonic Edge' }
                     ]
                 },
                 {
-                    id: 'final',
-                    subtitle: 'Processing',
-                    title: 'Protocol Satisfied',
-                    desc: 'All selections have been encrypted. Your profile is now being analyzed by the system.',
-                    options: []
+                    id: 'end',
+                    subtitle: 'Encryption',
+                    title: 'Sync Complete',
+                    desc: 'All selections have been logged and processed. The synergy matrix is now stable.',
+                    options: [{ label: 'End Session', value: 'reset', meta: 'CLEAR_CACHE' }]
                 }
             ]
         };
 
         let currentStep = 0;
 
-        function init() {
-            renderStep(0);
-        }
+        function render() {
+            const step = AppConfig.steps[currentStep];
+            const mount = document.getElementById('render-mount');
+            const progress = ((currentStep + 1) / AppConfig.steps.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
 
-        function renderStep(index) {
-            const step = config.steps[index];
-            const container = document.getElementById('step-content');
-            const root = document.getElementById('step-container');
-
-            let gridHTML = `<div class="grid">`;
+            let optionsHTML = `<div class="grid">`;
             step.options.forEach(opt => {
-                gridHTML += `
-                    <div class="choice-card" onclick="handleSelect('${step.id}', '${opt.value}', '${opt.label}')">
+                optionsHTML += `
+                    <div class="choice-card" onclick="handleChoice('${step.id}', '${opt.value}', '${opt.label}')">
                         <h3>${opt.label}</h3>
                         <p>${opt.meta}</p>
                     </div>
                 `;
             });
-            gridHTML += `</div>`;
+            optionsHTML += `</div>`;
 
-            root.innerHTML = `
+            mount.innerHTML = `
                 <div class="step active">
                     <span class="subtitle">${step.subtitle}</span>
                     <h1>${step.title}</h1>
                     <p class="description">${step.desc}</p>
-                    ${gridHTML}
+                    ${optionsHTML}
                 </div>
             `;
-
-            if(step.id === 'final') {
-                root.innerHTML += `<div class="loader"></div>`;
-                // Data is already in localStorage. Just a fake "sending" delay.
-                setTimeout(() => {
-                    notify("DATA ENCRYPTED & SAVED", "SYSTEM");
-                }, 1500);
-            }
         }
 
-        function handleSelect(id, val, label) {
-            // Enterprise Data Persistence
-            let currentData = JSON.parse(localStorage.getItem('joy_selections') || '{}');
-            currentData[id] = label;
-            localStorage.setItem('joy_selections', JSON.stringify(currentData));
+        function handleChoice(stepId, value, label) {
+            if (value === 'reset') {
+                location.reload();
+                return;
+            }
 
-            notify(`Logged: ${label}`);
-            
+            // Silent Data Logging (Enterprise Grade)
+            const storageKey = 'protocol_selections';
+            let data = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            data[stepId] = label;
+            localStorage.setItem(storageKey, JSON.stringify(data));
+
+            createToast(`Logged: ${label}`);
+
             currentStep++;
-            if (currentStep < config.steps.length) {
-                renderStep(currentStep);
+            if (currentStep < AppConfig.steps.length) {
+                render();
             }
         }
 
-        function notify(msg, type = "UPDATE") {
-            const container = document.getElementById('toast-container');
+        function createToast(msg) {
+            const stack = document.getElementById('toast-stack');
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerText = `[${type}] ${msg}`;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            toast.innerText = `[SUCCESS] ${msg}`;
+            stack.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
         }
 
-        window.onload = init;
+        window.onload = render;
     </script>
 </body>
     </html>
