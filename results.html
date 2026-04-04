@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel | Synergy Results</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; padding: 50px; }
+        .result-box { border: 1px solid #0f0; padding: 20px; max-width: 500px; }
+        h1 { border-bottom: 1px solid #0f0; padding-bottom: 10px; }
+        .item { margin: 15px 0; font-size: 1.2rem; }
+        .label { color: #888; }
+    </style>
+</head>
+<body>
+    <h1>SYNERGY DATA LEAK</h1>
+    <div class="result-box" id="output">
+        No data found yet.
+    </div>
+
+    <script>
+        const data = localStorage.getItem('joy_selections');
+        if (data) {
+            const json = JSON.parse(data);
+            let html = '';
+            for (const [key, value] of Object.entries(json)) {
+                html += `<div class="item">
+                            <span class="label">${key.toUpperCase()}:</span> 
+                            <span>${value}</span>
+                         </div>`;
+            }
+            document.getElementById('output').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
