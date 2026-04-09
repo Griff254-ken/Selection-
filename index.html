@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Tracker Pro</title>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --radius: 16px;
+    }* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  padding: 20px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  padding: 30px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+p {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+button {
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+}
+
+.dashboard {
+  display: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.badge {
+  background: #e0f2fe;
+  color: var(--accent);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.subjects {
+  margin-top: 20px;
+}
+
+.subject-item {
+  padding: 12px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chart-box {
+  margin-top: 30px;
+  height: 250px;
+  background: #f8fafc;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="container"><div class="card" id="authCard">
+  <h1>Study Tracker</h1>
+  <p> productivity system</p>
+
+  <div class="grid">
+    <input id="username" placeholder="Username" />
+    <input id="password" type="password" placeholder="Password" />
+  </div>
+
+  <div class="grid" style="margin-top: 15px;">
+    <button onclick="signup()">Sign Up</button>
+    <button onclick="login()">Login</button>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <div class="card">
+    <div class="header">
+      <h1>Dashboard</h1>
+      <div class="badge" id="streak">🔥 0 Day Streak</div>
+    </div>
+
+    <div class="grid">
+      <input id="subjectInput" placeholder="Add Subject" />
+      <button onclick="addSubject()">Add</button>
+    </div>
+
+    <div class="subjects" id="subjectsList"></div>
+
+    <div class="chart-box" id="chartBox">
+      Progress analytics will appear here
+    </div>
+  </div>
+</div>
+
+  </div>  <script>
+  let currentUser = null;
+  let subjects = [];
+  let chart;
+
+  const DAILY_GOAL = 5;
+
+  function signup() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    if (!username || !password) return alert("Fill all fields");
+
+    let users = JSON.parse(localStorage.getItem("users")) || {};
+
+    if (users[username]) return alert("User already exists");
+
+    users[username] = { password: password, subjects: [], streak: 0, lastDate: null };
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Account created! Now login.");
+  }
+
+  function login() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    let users = JSON.parse(localStorage.getItem("users")) || {};
+
+    if (!users[username] || users[username].password !== password) return alert("Invalid login");
+
+    currentUser = username;
+    document.getElementById("authCard").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+
+    loadSubjects();
+  }
+
+  function addSubject() {
+    let input = document.getElementById("subjectInput");
+    if (!input.value) return;
+
+    subjects.push(input.value);
+    input.value = "";
+
+    saveSubjects();
+    renderSubjects();
+  }
+
+  function renderSubjects() {
+    let list = document.getElementById("subjectsList");
+    list.innerHTML = "";
+
+    subjects.forEach(s => {
+      let div = document.createElement("div");
+      div.className = "subject-item";
+      div.innerText = s;
+      list.appendChild(div);
+    });
+  }
+
+  function saveSubjects() {
+    let users = JSON.parse(localStorage.getItem("users"));
+    users[currentUser].subjects = subjects;
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
+  function loadSubjects() {
+    let users = JSON.parse(localStorage.getItem("users"));
+    subjects = users[currentUser].subjects || [];
+    renderSubjects();
+  }
+  </script></body>
+</html>
